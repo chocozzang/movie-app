@@ -8,7 +8,7 @@ import SearchBox from './components/SearchBox';
 
 function App() {
   const [movies, setMovies] = useState([]);
-
+  const [searchValue, setSearchValue] = useState([]);
 
   // 검색어로 영화데이터 요청
   const getMovieRequest = async (searchValue) => {
@@ -20,19 +20,22 @@ function App() {
     const response = await fetch(url);
 
     const responseJson = await response.json();
-    setMovies(responseJson.Search);
-    console.log(responseJson);
+    //setMovies(responseJson.Search);
+    //console.log(responseJson);
+    if(responseJson.Search) {
+      setMovies(responseJson.Search)
+    }
   };
 
   useEffect(() => {
-    getMovieRequest('star wars');
-  }, []);
+    if(searchValue.length > 3) getMovieRequest(searchValue);
+  }, [searchValue]);
 
   return (
     <div className='container-fluid movie-app'>
       <div className='row align-items-center my-4'>
         <MovieListHeading heading="Movies"/>
-        <SearchBox />
+        <SearchBox searchValue={searchValue} setSearchValue={setSearchValue}/>
       </div>
       <div className='row'>
         <MovieList movies={movies}/>
