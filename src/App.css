@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Single+Day&display=swap');
+
 body {
   background: #141414;
   color: white;
+  font-family: 'Single Day', cursive;
 }
 
 .movie-app > .row {
@@ -36,5 +39,10 @@ body {
 	font-size: 20px;
 	padding: 20px;
 	text-align: center;
+}
+
+.centeralign {
+  margin-top: 100px;
+  margin-bottom: 100px;
 }
 
