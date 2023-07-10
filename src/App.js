@@ -9,7 +9,9 @@ import ScrollContainer from 'react-indiana-drag-scroll';
 
 function App() {
   const [movies, setMovies] = useState([]);
-  const [searchValue, setSearchValue] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [favorites, setFavorites] = useState([]);
+
 
   // 검색어로 영화데이터 요청
   const getMovieRequest = async (searchValue) => {
@@ -28,9 +30,38 @@ function App() {
     }
   };
 
+  // 로컬저장소에 저장
+  const saveToLocalStorage = (items) => {
+    localStorage.setItem('favorites', JSON.stringify(items));
+  }
+
+  // 실제로 선호작에 추가
+  const addFavoriteMovie = (movie) => {
+    const newList = [...favorites, movie]; // 선호작 리스트에 영화 하나 추가함
+    setFavorites(newList);
+    saveToLocalStorage(newList);
+  }
+
+  const removeFavoriteMovie = (movie) => {
+    const newList = favorites.filter(
+      (favorite) => favorite.imdbID !== movie.imdbID
+    ); // 해당 영화를 필터링하고 나머지를 newList에 저장함
+    setFavorites(newList);
+    saveToLocalStorage(newList);
+  }
+
   useEffect(() => {
     if(searchValue.length > 3) getMovieRequest(searchValue);
   }, [searchValue]);
+
+  // 브라우저 저장소에서 favorites들을 가져옴 - 앱 시작 시 1번만 실행함
+  useEffect(() => {
+    const movieFavorites = JSON.parse(localStorage.getItem('favorites'));
+    if (movieFavorites) {
+      setFavorites(movieFavorites);
+    }
+  }, []);
+
 
   return (
     <div className='container-fluid movie-app'>
@@ -39,11 +70,14 @@ function App() {
         <SearchBox searchValue={searchValue} setSearchValue={setSearchValue}/>
       </div>
       <ScrollContainer className='row scroll-container centeralign'>
-        <MovieList movies={movies}/>
+        <MovieList movies={movies} handleClick={addFavoriteMovie} addmovie={true}/>
       </ScrollContainer>
       <div className='row align-items-center my-4'>
         <MovieListHeading heading="내 선호작"/>
       </div>
+      <ScrollContainer className='row scroll-container'>
+        <MovieList movies={favorites} handleClick={removeFavoriteMovie} addmovie={false}/>
+      </ScrollContainer>
     </div>
   );
 }
