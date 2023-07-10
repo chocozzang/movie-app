@@ -8,6 +8,6 @@ body {
   flex-wrap : nowrap;
 }
 
-.movie-app > .row > .div {
+.movie-app > .row > div {
   width: fit-content;
 }

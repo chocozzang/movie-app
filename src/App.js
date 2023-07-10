@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
-import './App.css';
 import "bootstrap/dist/css/bootstrap.min.css";
+import './App.css';
 import MovieList from "./components/MovieList";
+import MovieListHeading from './components/MovieListHeading';
+import SearchBox from './components/SearchBox';
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -28,8 +30,12 @@ function App() {
 
   return (
     <div className='container-fluid movie-app'>
+      <div className='row align-items-center my-4'>
+        <MovieListHeading heading="Movies"/>
+        <SearchBox />
+      </div>
       <div className='row'>
-        <MovieList movies = {movies}/>
+        <MovieList movies={movies}/>
       </div>
     </div>
   );
